@@ -79,7 +79,7 @@ const PostFormModal = ({
     >
       <div
         className="animate-fade-in mx-auto w-full max-w-lg rounded-3xl bg-card p-8 shadow-xl"
-        onClick={(e) => e.stopPropagation}
+        onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-center-mb-6 text-2xl font-semibold text-foreground">
           {mode === "add" ? "Add A Post" : "Edit Post"}
