@@ -1,14 +1,91 @@
 @import "tailwindcss";
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@theme {
+  --color-border: 38 60% 75%;
+  --color-input: 38 60% 75%;
+  --color-ring: 38 92% 66%;
+  --color-background: 0 0% 85%;
+  --color-foreground: 0 0% 15%;
+  
+  --color-card: 0 0% 100%;
+  --color-card-foreground: 0 0% 15%;
+  
+  --color-popover: 0 0% 100%;
+  --color-popover-foreground: 0 0% 15%;
+  
+  --color-primary: 38 92% 66%;
+  --color-primary-foreground: 0 0% 15%;
+  --color-primary-light: 38 90% 90%;
+  
+  --color-secondary: 0 0% 96%;
+  --color-secondary-foreground: 0 0% 15%;
+  
+  --color-muted: 0 0% 90%;
+  --color-muted-foreground: 0 0% 45%;
+  
+  --color-accent: 38 90% 90%;
+  --color-accent-foreground: 0 0% 15%;
+  
+  --color-destructive: 5 90% 65%;
+  --color-destructive-foreground: 0 0% 100%;
+  
+  --color-success: 110 70% 89%;
+  --color-success-foreground: 0 0% 15%;
+  --color-success-icon: 145 63% 42%;
+  
+  --color-view: 38 70% 80%;
+  --color-view-foreground: 0 0% 15%;
+  
+  --color-tag: 0 0% 92%;
+  --color-tag-foreground: 0 0% 35%;
+  
+  --color-stat-red: 0 60% 75%;
+  --color-stat-green: 110 70% 89%;
+  --color-stat-amber: 38 90% 90%;
+  
+  --radius: 1.5rem;
 }
 
+@layer base {
+  .dark {
+    --color-background: 0 0% 10%;
+    --color-foreground: 0 0% 95%;
+    --color-card: 0 0% 15%;
+    --color-card-foreground: 0 0% 95%;
+    --color-popover: 0 0% 15%;
+    --color-popover-foreground: 0 0% 95%;
+    --color-primary: 38 92% 66%;
+    --color-primary-foreground: 0 0% 15%;
+    --color-primary-light: 38 50% 25%;
+    --color-secondary: 0 0% 20%;
+    --color-secondary-foreground: 0 0% 95%;
+    --color-muted: 0 0% 20%;
+    --color-muted-foreground: 0 0% 65%;
+    --color-accent: 38 50% 25%;
+    --color-accent-foreground: 0 0% 95%;
+    --color-destructive: 5 70% 45%;
+    --color-destructive-foreground: 0 0% 100%;
+    --color-success: 110 40% 25%;
+    --color-success-foreground: 0 0% 95%;
+    --color-success-icon: 145 63% 42%;
+    --color-view: 38 40% 35%;
+    --color-view-foreground: 0 0% 95%;
+    --color-tag: 0 0% 25%;
+    --color-tag-foreground: 0 0% 75%;
+    --color-stat-red: 0 40% 30%;
+    --color-stat-green: 110 40% 25%;
+    --color-stat-amber: 38 50% 25%;
+    --color-border: 38 30% 35%;
+    --color-input: 38 30% 35%;
+    --color-ring: 38 92% 66%;
+  }
 
+  * {
+    @apply border-border;
+  }
 
-
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
