@@ -1,14 +1,14 @@
-import axios, { Axios, AxiosError } from 'axios'
+import axios, { AxiosError } from "axios"
 
-import type { Accounts } from '@/types/accounts'
-import { type PostData, type Post, type SuccessPost } from '@/types/posts'
+import type { Accounts } from "@/types/accounts"
+import { type Post, type PostData, type SuccessPost } from "@/types/posts"
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 })
 
@@ -21,7 +21,7 @@ interface ApiErrorResponse {
 
 // Add auth token to requests
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem("token")
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
@@ -33,7 +33,7 @@ const handleApiError = (error: unknown, defaultMessage: string): never => {
   let errorMessage = defaultMessage
   let statusCode: number | undefined
 
-  if(axios.isAxiosError(error)) {
+  if (axios.isAxiosError(error)) {
     const axiosError = error as AxiosError<ApiErrorResponse>
 
     // Extract error message from response
@@ -46,21 +46,21 @@ const handleApiError = (error: unknown, defaultMessage: string): never => {
 
     statusCode = axiosError.response?.status
 
-    console.error('API error:', {
+    console.error("API error:", {
       message: errorMessage,
       status: statusCode,
       endpoint: axiosError.config?.url,
       method: axiosError.config?.method?.toUpperCase(),
-      data: axiosError.config?.data
+      data: axiosError.config?.data,
     })
   } else if (error instanceof Error) {
     errorMessage = error.message
-    console.error('Error:', {
+    console.error("Error:", {
       message: errorMessage,
       stack: error.stack,
     })
   } else {
-    console.error('Unknown error:', error)
+    console.error("Unknown error:", error)
   }
 
   throw new Error(errorMessage)
@@ -70,10 +70,10 @@ const handleApiError = (error: unknown, defaultMessage: string): never => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if(error.response?.status === 401) {
+    if (error.response?.status === 401) {
       // Redirect to login page if token is invalid or expired
-      localStorage.removeItem('token')
-      window.location.href = '/login'
+      localStorage.removeItem("token")
+      window.location.href = "/login"
     }
 
     return Promise.reject(error)
@@ -85,20 +85,33 @@ export const authApi = {
   // Login user
   login: async (email: string, password: string) => {
     try {
-      const response = await api.post('/account/login', { email, password })
+      const response = await api.post("/account/login", { email, password })
       return response.data
     } catch (error) {
-      handleApiError(error, 'Failed to login. Please check your credentials')
+      handleApiError(error, "Failed to login. Please check your credentials")
     }
   },
 
   // Register a new user
-  register: async (username: string, email: string, password: string, role: string) => {
+  register: async (
+    username: string,
+    email: string,
+    password: string,
+    role: string
+  ) => {
     try {
-      const response = await api.post('/account/register', { username, email, password, role })
+      const response = await api.post("/account/register", {
+        username,
+        email,
+        password,
+        role,
+      })
       return response.data
     } catch (error) {
-      handleApiError(error, 'Failed to register account. Please check your credentials.')
+      handleApiError(
+        error,
+        "Failed to register account. Please check your credentials."
+      )
     }
   },
 }
@@ -108,15 +121,19 @@ export const postsApi = {
   // Get all posts - Admin only
   getAll: async (page: number = 1, limit: number = 9) => {
     try {
-      const response = await api.get<Post>('/posts', { params: { page, limit } })
+      const response = await api.get<Post>("/posts", {
+        params: { page, limit },
+      })
 
       return {
         posts: response.data.data || [],
-        totalPages: response.data.totalPages || Math.ceil((response.data.totalPosts || 0) / limit),
+        totalPages:
+          response.data.totalPages ||
+          Math.ceil((response.data.totalPosts || 0) / limit),
         currentPage: page,
       }
     } catch (error) {
-      handleApiError(error, 'Failed to fetch posts.')
+      handleApiError(error, "Failed to fetch posts.")
     }
   },
 
@@ -127,7 +144,9 @@ export const postsApi = {
 
       return {
         posts: response.data.data || [],
-        totalPages: response.data.totalPages || Math.ceil((response.data.totalPosts || 0) / limit),
+        totalPages:
+          response.data.totalPages ||
+          Math.ceil((response.data.totalPosts || 0) / limit),
         currentPage: page,
       }
     } catch (error) {
@@ -141,13 +160,13 @@ export const postsApi = {
       const response = await api.get<PostData>(`/posts/view/${id}`)
       return response.data
     } catch (error) {
-      handleApiError(error, 'Failed to fetch post details.')
+      handleApiError(error, "Failed to fetch post details.")
     }
   },
 
   // Create a new post
   create: async (title: string, content: string, tags: string[]) => {
-    const errorMessage = 'Failed to create post.'
+    const errorMessage = "Failed to create post."
 
     try {
       const response = await api.post<SuccessPost>("/posts/create", {
@@ -157,37 +176,42 @@ export const postsApi = {
       })
 
       return {
-        message: response.data.message
+        message: response.data.message,
       }
     } catch (error) {
       handleApiError(error, errorMessage)
     }
 
     return {
-      message: errorMessage
+      message: errorMessage,
     }
   },
 
   // Edit a selected posts by Id
-  update: async (id: number, title: string, content: string, tags: string[]) => {
-    const errorMessage = 'Failed to update post.'
+  update: async (
+    id: number,
+    title: string,
+    content: string,
+    tags: string[]
+  ) => {
+    const errorMessage = "Failed to update post."
 
     try {
       const response = await api.put<SuccessPost>(`/posts/edit/${id}`, {
         title,
         body: content,
-        tags
+        tags,
       })
 
       return {
-        message: response.data.message
+        message: response.data.message,
       }
     } catch (error) {
       handleApiError(error, errorMessage)
     }
 
     return {
-      message: errorMessage
+      message: errorMessage,
     }
   },
 
@@ -199,14 +223,14 @@ export const postsApi = {
       const response = await api.delete(`/posts/delete/${id}`)
 
       return {
-        message: response.data.message
+        message: response.data.message,
       }
     } catch (error) {
-      handleApiError(error, 'Failed to delete post.')
+      handleApiError(error, "Failed to delete post.")
     }
 
     return {
-      message: errorMessage
+      message: errorMessage,
     }
   },
 }
@@ -217,40 +241,43 @@ export const statsApi = {
   getStats: async () => {
     try {
       // Get all accounts count
-      const accountsResponse = await api.get<Accounts>('/accounts')
+      const accountsResponse = await api.get<Accounts>("/accounts")
       const totalAccounts = accountsResponse.data.accounts.length || 0
 
       // Get all posts count
       const allPostsResponse = await api.get<Post>("/posts", {
-        params: { page: 1, limit: 1 }
+        params: { page: 1, limit: 1 },
       })
       const totalPosts = allPostsResponse.data.totalPosts || 0
 
       // Get user posts count
-      const myPostsResponse = await api.post<Post>('/posts/mypost', { page:  1, limit: 1 })
+      const myPostsResponse = await api.post<Post>("/posts/mypost", {
+        page: 1,
+        limit: 1,
+      })
       const myPosts = myPostsResponse.data.totalPosts || 0
 
       return {
         totalAccounts,
         totalPosts,
-        myPosts
+        myPosts,
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error('Error fetching stats:', {
+        console.error("Error fetching stats:", {
           message: error.message,
           status: error.response?.status,
         })
       } else if (error instanceof Error) {
-        console.error('Error fetching stats:', error.message)
+        console.error("Error fetching stats:", error.message)
       } else {
-        console.error('Unknown error fetching stats:', error)
+        console.error("Unknown error fetching stats:", error)
       }
 
       return {
         totalAccounts: 0,
         totalPosts: 0,
-        myPosts: 0
+        myPosts: 0,
       }
     }
   },

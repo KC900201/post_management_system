@@ -1,5 +1,5 @@
 import { useFormik } from "formik"
-import React, { useEffect, useState } from "react"
+import React, { useLayoutEffect, useState } from "react"
 import * as Yup from "yup"
 
 import { Button } from "@/components/atoms"
@@ -55,12 +55,9 @@ const PostFormModal = ({
     enableReinitialize: true,
   })
 
-  useEffect(() => {
-    if (initialData) {
-      setTags(initialData.tags)
-    } else {
-      setTags([])
-    }
+  useLayoutEffect(() => {
+    // Schedule the state update to avoid cascading renders
+    setTags(initialData?.tags || [])
   }, [initialData, isOpen])
 
   const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

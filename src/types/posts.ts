@@ -1,4 +1,4 @@
-export interface PostData  {
+export interface PostData {
   id: number
   userId: number
   title: string
@@ -7,7 +7,7 @@ export interface PostData  {
   tags: string[]
 }
 
-export interface Post  {
+export interface Post {
   page: number
   limit: number
   totalPages: number

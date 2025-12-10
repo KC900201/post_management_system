@@ -16,11 +16,11 @@ export default defineConfig({
       usePolling: true
     },
     proxy: {
-      '/api': {
-        target: 'https://api-for-testing-gujp.onrender.com',
+      "/api": {
+        target: "https://api-for-testing-gujp.onrender.com",
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, '/api')
+        rewrite: (path) => path.replace(/^\/api/, "/api")
       }
     }
   }

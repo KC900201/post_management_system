@@ -1,7 +1,7 @@
-export { default as FormField } from './FormField'
-export { default as TextAreaField } from './TextAreaField'
-export { default as SelectField } from './SelectField'
-export { default as TagInput } from './TagInput'
-export { default as PostCard } from './PostCard'
-export { default as StatCard } from './StatCard'
-export { default as Pagination } from './Pagination'
+export { default as FormField } from "./FormField"
+export { default as Pagination } from "./Pagination"
+export { default as PostCard } from "./PostCard"
+export { default as SelectField } from "./SelectField"
+export { default as StatCard } from "./StatCard"
+export { default as TagInput } from "./TagInput"
+export { default as TextAreaField } from "./TextAreaField"

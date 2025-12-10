@@ -94,7 +94,8 @@ Users can:
 - **State Management**:
   - [React Context API](https://react.dev/reference/react/createContext) - For authentication state
   - [TanStack Query 5.90.12](https://tanstack.com/query) - Server state management and caching
-- **HTTP Client**: [Axios 1.13.2](https://axios-http.com/) - Promise-based HTTP client
+- **HTTP Client**: [Axios 1.13.2](https://axios-http.com/) - Promise-based HTTP client with interceptors
+- **API Integration**: Real REST API with JWT authentication
 - **UI Components**:
   - [Radix UI](https://www.radix-ui.com/) - Accessible, unstyled component primitives
   - [Lucide React 0.556.0](https://lucide.dev/) - Icon library
@@ -145,7 +146,6 @@ src/
 │   │   ├── ViewPostPage.tsx
 │   │   └── NotFoundPage.tsx
 │   └── ui/             # Radix UI components
-│       ├── button.tsx
 │       ├── select.tsx
 │       ├── toast.tsx
 │       ├── toaster.tsx
@@ -156,8 +156,8 @@ src/
 ├── hooks/
 │   └── use-toast.ts     # Toast notification hook
 ├── lib/
-│   ├── api.ts           # API service layer with mock data
-│   ├── auth.ts          # Authentication utilities
+│   ├── api.ts           # API service layer with real endpoints
+│   ├── auth.ts          # Authentication utilities (JWT parsing)
 │   └── utils.ts         # Utility functions (cn, etc.)
 ├── App.tsx              # Main application component with routing
 ├── main.tsx             # Application entry point
@@ -331,7 +331,17 @@ cd post_management_system
 npm install
 ```
 
-3. Verify installation:
+3. Configure environment variables:
+
+Create a `.env` file in the project root:
+
+```bash
+VITE_API_BASE_URL=https://api-for-testing-gujp.onrender.com/api
+```
+
+> **Note**: The `.env` file is already included in `.gitignore` to protect sensitive data.
+
+4. Verify installation:
 
 ```bash
 npm list
@@ -367,21 +377,104 @@ npm run preview
 npm run lint
 ```
 
-### Default Test Credentials
+### API Integration
 
-The application uses mock authentication. Use these credentials to test:
+The application integrates with a real REST API for authentication and data management.
 
-**Admin Account:**
+**API Base URL**: `https://api-for-testing-gujp.onrender.com/api`
 
-- Email: `admin@yahoo.com`
-- Password: `password123`
-- Access: Can view statistics, manage all posts
+**Authentication Flow:**
 
-**User Account:**
+1. User registers or logs in via API endpoints
+2. Server returns JWT token upon successful authentication
+3. Token is stored in localStorage
+4. All subsequent API requests include the token in Authorization header
+5. Token is automatically parsed to extract user information (role, ID, username)
+6. 401 responses trigger automatic logout and redirect to login page
 
-- Email: `user@yahoo.com`
-- Password: `password123`
-- Access: Can create and manage own posts only
+**Available Endpoints:**
+
+- **Auth**: `/account/login`, `/account/register`
+- **Posts**: `/posts` (GET all - admin only), `/posts/mypost` (POST user's posts), `/posts/view/:id`, `/posts/create`, `/posts/edit/:id`, `/posts/delete/:id`
+- **Accounts**: `/accounts` (GET all - admin only)
+
+**Getting Started:**
+
+You need to register a new account to use the application:
+
+1. Navigate to the Register page
+2. Choose a role ("user" or "admin")
+3. Fill in username, email, and password
+4. After registration, you'll be redirected to login
+5. Use your credentials to access the application
+
+**Role-Based Access:**
+
+- **Admin**: Can view all posts, statistics dashboard, and manage any post
+- **User**: Can view all posts but only create, edit, and delete their own posts
+
+### API Error Handling
+
+The application includes comprehensive error handling:
+
+**Type-Safe Error Handling:**
+
+- Uses TypeScript discriminated unions for error types
+- Axios errors are checked with `axios.isAxiosError()`
+- Generic errors are caught with `instanceof Error`
+- No `any` types used in error handling code
+
+**Error Response Handling:**
+
+- Extracts meaningful error messages from API responses
+- Supports multiple error formats (message, error, errors[])
+- Logs detailed error information to console for debugging
+- Displays user-friendly error messages via toast notifications
+
+**Axios Interceptors:**
+
+- **Request Interceptor**: Automatically adds JWT token to all requests
+- **Response Interceptor**: Handles 401 errors by clearing token and redirecting to login
+
+**Error Logging:**
+
+All API errors are logged with context:
+
+```typescript
+console.error('API error:', {
+  message: errorMessage,
+  status: statusCode,
+  endpoint: axiosError.config?.url,
+  method: axiosError.config?.method?.toUpperCase(),
+  data: axiosError.config?.data
+})
+```
+
+### Environment Variables
+
+The application uses Vite's environment variable system:
+
+**Required Variables:**
+
+- `VITE_API_BASE_URL` - Base URL for the REST API
+
+**Important Notes:**
+
+- Variables must be prefixed with `VITE_` to be exposed to client-side code
+- Environment variables are loaded from `.env` file in project root
+- Restart the dev server after modifying `.env` file
+- `.env` is excluded from version control via `.gitignore`
+- Create `.env.example` with dummy values for team collaboration
+
+**Type Safety:**
+
+Environment variables are typed in `src/vite-env.d.ts`:
+
+```typescript
+interface ImportMetaEnv {
+  readonly VITE_API_BASE_URL: string
+}
+```
 
 ### Project Scripts
 

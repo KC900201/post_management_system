@@ -8,4 +8,4 @@ type Account = {
 
 export interface Accounts {
   accounts: Account[]
-} 
+}
