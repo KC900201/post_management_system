@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 
 import { Pagination, PostCard, StatCard } from "@/components/molecules"
@@ -38,8 +38,11 @@ const PostListPage = () => {
   }, [location.state])
 
   const { data: postsData, isLoading: postsLoading } = useQuery({
-    queryKey: ["posts", currentPage],
-    queryFn: () => postsApi.getAll(currentPage),
+    queryKey: ["posts", currentPage, isAdmin],
+    queryFn: () =>
+      isAdmin
+        ? postsApi.getAll(currentPage, 9)
+        : postsApi.getMyPosts(currentPage, 9),
   })
 
   const { data: statsData } = useQuery({
@@ -94,7 +97,7 @@ const PostListPage = () => {
       setSelectedPost({
         id: post.id,
         title: post.title,
-        content: post.fullContent || post.content,
+        content: post.body,
         tags: post.tags,
       })
       setShowEditModal(true)
@@ -107,7 +110,7 @@ const PostListPage = () => {
       setSelectedPost({
         id: post.id,
         title: post.title,
-        content: post.content,
+        content: post.body,
         tags: post.tags,
       })
       setShowDeleteModal(true)
@@ -148,7 +151,7 @@ const PostListPage = () => {
                 key={post.id}
                 id={post.id}
                 title={post.title}
-                content={post.content}
+                content={post.body}
                 tags={post.tags}
                 date={post.date}
                 onEdit={handleEdit}

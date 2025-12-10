@@ -12,10 +12,11 @@ export const parseToken = (token: string): User | null => {
     return {
       userId: decoded.userId,
       username: decoded.username,
-      email: decoded.email,
+      email: decoded.email ,
       role: decoded.role,
     };
-  } catch {
+  } catch (error) {
+    console.error("Error parsing token:", error)
     return null;
   }
 };
