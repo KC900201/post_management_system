@@ -12,7 +12,7 @@ const Tag = ({ label, onRemove, className }: TagProps) => {
   return (
     <span
       className={cn(
-        "text-tag-foreground, inline-flex items-center gap-1 rounded-full bg-tag px-3 py-1 text-xs font-medium",
+        "inline-flex items-center gap-1 rounded-full bg-tag px-3 py-1 text-xs font-medium text-tag-foreground",
         className
       )}
     >

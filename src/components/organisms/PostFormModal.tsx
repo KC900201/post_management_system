@@ -18,7 +18,15 @@ interface PostFormModalProps {
   isLoading?: boolean
 }
 
-const validationSchema = Yup.object({})
+const validationSchema = Yup.object({
+  title: Yup.string()
+    .required("Title is required")
+    .max(100, "Title must be less than 100 characters"),
+  content: Yup.string()
+    .required("Content is required")
+    .max(5000, "Content must be less than 5000 characters"),
+  tagsInput: Yup.string(),
+})
 
 const PostFormModal = ({
   isOpen,
@@ -81,7 +89,7 @@ const PostFormModal = ({
         className="animate-fade-in mx-auto w-full max-w-lg rounded-3xl bg-card p-8 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-center-mb-6 text-2xl font-semibold text-foreground">
+        <h2 className="mb-6 text-center text-2xl font-semibold text-foreground">
           {mode === "add" ? "Add A Post" : "Edit Post"}
         </h2>
 

@@ -5,7 +5,7 @@ interface ErrorMessageProps {
   className?: string
 }
 
-const ErrorMesage = ({ message, className }: ErrorMessageProps) => {
+const ErrorMessage = ({ message, className }: ErrorMessageProps) => {
   if (!message) return null
 
   return (
@@ -13,4 +13,4 @@ const ErrorMesage = ({ message, className }: ErrorMessageProps) => {
   )
 }
 
-export default ErrorMesage
+export default ErrorMessage

@@ -13,7 +13,7 @@ interface LinkProps extends RouterLinkProps {
 
 const variantClasses: Record<LinkVariant, string> = {
   primary: "text-primary hover:text-primary/80",
-  destructive: "text-destructive hover: text-destructive/80",
+  destructive: "text-destructive hover:text-destructive/80",
 }
 
 const Link = ({
