@@ -187,7 +187,7 @@ export const postsApi = {
     }
   },
 
-  // Edit a selected posts by Id
+  // Edit a selected post by Id
   update: async (
     id: number,
     title: string,
