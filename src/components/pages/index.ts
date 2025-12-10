@@ -1,0 +1,6 @@
+export { default as LoginPage } from './LoginPage'
+export { default as RegisterPage } from './RegisterPage'
+export { default as PostListPage } from './PostListPage'
+export { default as ViewPostPage } from './ViewPostPage'
+export { default as IndexPage } from './IndexPage'
+export { default as NotFoundPage } from './NotFoundPage'

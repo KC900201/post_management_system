@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+@theme {
+  /* Color schema: #f8b959 #fdeacd #ffffff #f95a50 #d9f7cf #E6A5A1 */
+
+  /* Main colors */
+  --color-primary: oklch(
+    from #f8b959 l c h
+  ); /* Orange/amber - buttons, accents */
+  --color-primary-foreground: oklch(0.15 0 0); /* Dark text on primary */
+  --color-primary-light: oklch(
+    from #fdeacd l c h
+  ); /* Light peach - backgrounds, secondary */
+
+  /* Background and surfaces */
+  --color-background: oklch(0.92 0.005 90); /* Light gray background */
+  --color-foreground: oklch(0.2 0 0); /* Dark text */
+  --color-card: oklch(from #ffffff l c h); /* White - cards */
+  --color-card-foreground: oklch(0.2 0 0); /* Dark text on cards */
+
+  /* Semantic colors */
+  --color-destructive: oklch(from #f95a50 l c h); /* Red - delete, errors */
+  --color-destructive-foreground: oklch(1 0 0); /* White text on red */
+
+  --color-success: oklch(from #d9f7cf l c h); /* Light green - success, edit */
+  --color-success-foreground: oklch(0.2 0 0); /* Dark text on green */
+  --color-success-icon: oklch(0.35 0.15 145); /* Dark green icon */
+
+  --color-view: oklch(from #fdeacd l c h); /* Light peach - view button */
+  --color-view-foreground: oklch(0.2 0 0); /* Dark text */
+
+  /* UI elements */
+  --color-border: oklch(from #f8b959 l c h); /* Orange border */
+  --color-input: oklch(from #f8b959 l c h); /* Orange input border */
+  --color-ring: oklch(from #f8b959 l c h); /* Orange focus ring */
+
+  --color-secondary: oklch(from #fdeacd l c h); /* Light peach */
+  --color-secondary-foreground: oklch(0.2 0 0); /* Dark text */
+
+  --color-muted: oklch(0.94 0.005 90); /* Very light gray */
+  --color-muted-foreground: oklch(0.5 0 0); /* Medium gray text */
+
+  /* Tags and stats */
+  --color-tag: oklch(from #fdeacd l c h); /* Light peach tags */
+  --color-tag-foreground: oklch(0.35 0.02 50); /* Brown text */
+
+  --color-stat-red: oklch(from #e6a5a1 l c h); /* Light red/pink */
+  --color-stat-green: oklch(from #d9f7cf l c h); /* Light green */
+  --color-stat-amber: oklch(from #fdeacd l c h); /* Light peach */
+
+  /* Popover */
+  --color-popover: oklch(from #ffffff l c h);
+  --color-popover-foreground: oklch(0.2 0 0);
+
+  --color-accent: oklch(from #fdeacd l c h);
+  --color-accent-foreground: oklch(0.2 0 0);
+}
+
+@layer base {
+  * {
+    border-color: #f8b959;
+  }
+
+  body {
+    background-color: #e8e8e8;
+    color: #2d2d2d;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body {
+      background-color: #1a1a1a;
+      color: #f0f0f0;
+    }
+
+    * {
+      border-color: #d4a574;
+    }
+  }
+}
