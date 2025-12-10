@@ -67,7 +67,7 @@ export const postsApi = {
 
   // Get logged user's posts
   getMyPosts: async (page: number = 1, limit: number = 9) => {
-    const response = await api.post<Post>("/posts/mypost")
+    const response = await api.post<Post>("/posts/mypost", { page, limit })
 
     return {
       posts: response.data.data || [],
@@ -134,7 +134,7 @@ export const statsApi = {
       const totalPosts = allPostsResponse.data.totalPosts || 0
 
       // Get user posts count
-      const myPostsResponse = await api.post<Post>('/posts/mypost')
+      const myPostsResponse = await api.post<Post>('/posts/mypost', { page:  1, limit: 1 })
       const myPosts = myPostsResponse.data.totalPosts || 0
 
       return {
