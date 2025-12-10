@@ -20,7 +20,7 @@ export default defineConfig({
         target: "https://api-for-testing-gujp.onrender.com",
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, "/api")
+        
       }
     }
   }
