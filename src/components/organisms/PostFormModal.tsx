@@ -1,5 +1,5 @@
 import { useFormik } from "formik"
-import React, { useLayoutEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import * as Yup from "yup"
 
 import { Button } from "@/components/atoms"
@@ -55,7 +55,7 @@ const PostFormModal = ({
     enableReinitialize: true,
   })
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     // Schedule the state update to avoid cascading renders
     setTags(initialData?.tags || [])
   }, [initialData, isOpen])
