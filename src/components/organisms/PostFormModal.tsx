@@ -56,11 +56,8 @@ const PostFormModal = ({
   })
 
   useEffect(() => {
-    if (initialData) {
-      setTags(initialData.tags)
-    } else {
-      setTags([])
-    }
+    // Schedule the state update to avoid cascading renders
+    setTags(initialData?.tags || [])
   }, [initialData, isOpen])
 
   const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

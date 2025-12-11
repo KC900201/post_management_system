@@ -1,4 +1,3 @@
-import React from "react"
 import { useNavigate, useParams } from "react-router-dom"
 
 import { Button, Tag } from "@/components/atoms"
@@ -57,7 +56,7 @@ const ViewPostPage = () => {
         </h2>
 
         <div className="whitesapce-pre-line mb-6 leading-relaxed text-muted-foreground">
-          {post.content}
+          {post.body}
         </div>
 
         <div className="flex flex-wrap gap-2">

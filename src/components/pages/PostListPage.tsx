@@ -1,10 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 
 import { Pagination, PostCard, StatCard } from "@/components/molecules"
 import {
   DeletePostModal,
+  ErrorModal,
   PostFormModal,
   SuccessModal,
 } from "@/components/organisms"
@@ -22,6 +23,8 @@ const PostListPage = () => {
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
   const [successMessage, setSuccessMessage] = useState("")
   const [selectedPost, setSelectedPost] = useState<{
     id: number
@@ -38,8 +41,11 @@ const PostListPage = () => {
   }, [location.state])
 
   const { data: postsData, isLoading: postsLoading } = useQuery({
-    queryKey: ["posts", currentPage],
-    queryFn: () => postsApi.getAll(currentPage),
+    queryKey: ["posts", currentPage, isAdmin],
+    queryFn: () =>
+      isAdmin
+        ? postsApi.getAll(currentPage, 9)
+        : postsApi.getMyPosts(currentPage, 9),
   })
 
   const { data: statsData } = useQuery({
@@ -55,8 +61,14 @@ const PostListPage = () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
       queryClient.invalidateQueries({ queryKey: ["stats"] })
       setShowAddModal(false)
-      setSuccessMessage(data.message)
+      setSuccessMessage(data?.message || "Post created successfully")
       setShowSuccessModal(true)
+    },
+    onError: (error) => {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Failed to create post"
+      )
+      setShowErrorModal(true)
     },
   })
 
@@ -71,8 +83,14 @@ const PostListPage = () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
       setShowEditModal(false)
       setSelectedPost(null)
-      setSuccessMessage(data.message)
+      setSuccessMessage(data?.message || "Post updated successfully")
       setShowSuccessModal(true)
+    },
+    onError: (error) => {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Failed to update post"
+      )
+      setShowErrorModal(true)
     },
   })
 
@@ -83,8 +101,14 @@ const PostListPage = () => {
       queryClient.invalidateQueries({ queryKey: ["stats"] })
       setShowDeleteModal(false)
       setSelectedPost(null)
-      setSuccessMessage(data.message)
+      setSuccessMessage(data?.message || "Post deleted successfully")
       setShowSuccessModal(true)
+    },
+    onError: (error) => {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Failed to delete post"
+      )
+      setShowErrorModal(true)
     },
   })
 
@@ -94,7 +118,7 @@ const PostListPage = () => {
       setSelectedPost({
         id: post.id,
         title: post.title,
-        content: post.fullContent || post.content,
+        content: post.body,
         tags: post.tags,
       })
       setShowEditModal(true)
@@ -107,7 +131,7 @@ const PostListPage = () => {
       setSelectedPost({
         id: post.id,
         title: post.title,
-        content: post.content,
+        content: post.body,
         tags: post.tags,
       })
       setShowDeleteModal(true)
@@ -116,7 +140,7 @@ const PostListPage = () => {
 
   return (
     <DashboardTemplate showAddPost>
-      <h1 className="mb-8 text-center text-2xl font-bold text-foreground md:text-3xl">
+      <h1 className="mb-8 text-center text-2xl font-bold text-foreground md:text-3xl dark:text-background">
         Post List
       </h1>
 
@@ -148,7 +172,7 @@ const PostListPage = () => {
                 key={post.id}
                 id={post.id}
                 title={post.title}
-                content={post.content}
+                content={post.body}
                 tags={post.tags}
                 date={post.date}
                 onEdit={handleEdit}
@@ -203,6 +227,12 @@ const PostListPage = () => {
         isOpen={showSuccessModal}
         message={successMessage}
         onClose={() => setShowSuccessModal(false)}
+      />
+
+      <ErrorModal
+        isOpen={showErrorModal}
+        message={errorMessage}
+        onClose={() => setShowErrorModal(false)}
       />
     </DashboardTemplate>
   )

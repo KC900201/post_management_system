@@ -1,5 +1,5 @@
 import { type User, getStoredUser } from "@/lib/auth"
-import React, { createContext, useContext, useEffect, useState } from "react"
+import React, { createContext, useContext, useState } from "react"
 
 interface AuthContextType {
   user: User | null
@@ -13,14 +13,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<User | null>(null)
-
-  useEffect(() => {
-    const storedUser = getStoredUser()
-    if (storedUser) {
-      setUser(storedUser)
-    }
-  }, [])
+  const [user, setUser] = useState<User | null>(() => getStoredUser())
 
   const value: AuthContextType = {
     user,
