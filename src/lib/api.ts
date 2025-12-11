@@ -166,8 +166,6 @@ export const postsApi = {
 
   // Create a new post
   create: async (title: string, content: string, tags: string[]) => {
-    const errorMessage = "Failed to create post."
-
     try {
       const response = await api.post<SuccessPost>("/posts/create", {
         title,
@@ -179,11 +177,7 @@ export const postsApi = {
         message: response.data.message,
       }
     } catch (error) {
-      handleApiError(error, errorMessage)
-    }
-
-    return {
-      message: errorMessage,
+      handleApiError(error, "Failed to create post.")
     }
   },
 
@@ -194,8 +188,6 @@ export const postsApi = {
     content: string,
     tags: string[]
   ) => {
-    const errorMessage = "Failed to update post."
-
     try {
       const response = await api.put<SuccessPost>(`/posts/edit/${id}`, {
         title,
@@ -207,18 +199,12 @@ export const postsApi = {
         message: response.data.message,
       }
     } catch (error) {
-      handleApiError(error, errorMessage)
-    }
-
-    return {
-      message: errorMessage,
+      handleApiError(error, "Failed to update post.")
     }
   },
 
   // Delete a selected post
   delete: async (id: number) => {
-    const errorMessage = "Failed to delete post."
-
     try {
       const response = await api.delete(`/posts/delete/${id}`)
 
@@ -227,10 +213,6 @@ export const postsApi = {
       }
     } catch (error) {
       handleApiError(error, "Failed to delete post.")
-    }
-
-    return {
-      message: errorMessage,
     }
   },
 }

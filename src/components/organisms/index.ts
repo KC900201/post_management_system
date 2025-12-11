@@ -1,4 +1,5 @@
 export { default as DeletePostModal } from "./DeletePostModal"
+export { default as ErrorModal } from "./ErrorModal"
 export { default as Header } from "./Header"
 export { default as LoginForm } from "./LoginForm"
 export { default as PostFormModal } from "./PostFormModal"

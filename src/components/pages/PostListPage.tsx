@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom"
 import { Pagination, PostCard, StatCard } from "@/components/molecules"
 import {
   DeletePostModal,
+  ErrorModal,
   PostFormModal,
   SuccessModal,
 } from "@/components/organisms"
@@ -22,6 +23,8 @@ const PostListPage = () => {
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
   const [successMessage, setSuccessMessage] = useState("")
   const [selectedPost, setSelectedPost] = useState<{
     id: number
@@ -58,8 +61,14 @@ const PostListPage = () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
       queryClient.invalidateQueries({ queryKey: ["stats"] })
       setShowAddModal(false)
-      setSuccessMessage(data.message)
+      setSuccessMessage(data?.message || "Post created successfully")
       setShowSuccessModal(true)
+    },
+    onError: (error) => {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Failed to create post"
+      )
+      setShowErrorModal(true)
     },
   })
 
@@ -74,8 +83,14 @@ const PostListPage = () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
       setShowEditModal(false)
       setSelectedPost(null)
-      setSuccessMessage(data.message)
+      setSuccessMessage(data?.message || "Post updated successfully")
       setShowSuccessModal(true)
+    },
+    onError: (error) => {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Failed to update post"
+      )
+      setShowErrorModal(true)
     },
   })
 
@@ -86,8 +101,14 @@ const PostListPage = () => {
       queryClient.invalidateQueries({ queryKey: ["stats"] })
       setShowDeleteModal(false)
       setSelectedPost(null)
-      setSuccessMessage(data.message)
+      setSuccessMessage(data?.message || "Post deleted successfully")
       setShowSuccessModal(true)
+    },
+    onError: (error) => {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Failed to delete post"
+      )
+      setShowErrorModal(true)
     },
   })
 
@@ -206,6 +227,12 @@ const PostListPage = () => {
         isOpen={showSuccessModal}
         message={successMessage}
         onClose={() => setShowSuccessModal(false)}
+      />
+
+      <ErrorModal
+        isOpen={showErrorModal}
+        message={errorMessage}
+        onClose={() => setShowErrorModal(false)}
       />
     </DashboardTemplate>
   )
